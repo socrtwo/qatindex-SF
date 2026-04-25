@@ -1,9 +1,18 @@
-# Microsoft Office QAT Index
+<!--MODERNIZED:v1-->
+# Qatindex
 
-<!--PAGES_LINK_BANNER-->
-> 🌐 **Live page:** [https://socrtwo.github.io/qatindex-SF/](https://socrtwo.github.io/qatindex-SF/)  
-> 📦 **Releases:** [github.com/socrtwo/qatindex-SF/releases](https://github.com/socrtwo/qatindex-SF/releases)
-<!--/PAGES_LINK_BANNER-->
+> Migrated from SourceForge via SF2GH Migrator
+
+[![Live page](https://img.shields.io/badge/live-page-ff2e93?style=for-the-badge)](https://socrtwo.github.io/qatindex-SF/)
+[![Releases](https://img.shields.io/github/v/release/socrtwo/qatindex-SF?style=for-the-badge&color=7c3aed)](https://github.com/socrtwo/qatindex-SF/releases)
+[![License](https://img.shields.io/github/license/socrtwo/qatindex-SF?style=for-the-badge&color=22d3ee)](https://github.com/socrtwo/qatindex-SF/blob/main/LICENSE)
+[![Last commit](https://img.shields.io/github/last-commit/socrtwo/qatindex-SF?style=for-the-badge&color=34d399)](https://github.com/socrtwo/qatindex-SF/commits)
+
+🌐 **Live:** https://socrtwo.github.io/qatindex-SF/  
+📦 **Downloads:** [Releases](https://github.com/socrtwo/qatindex-SF/releases)  
+📂 **Source:** [socrtwo/qatindex-SF](https://github.com/socrtwo/qatindex-SF)
+
+---
 
 A searchable index of Quick Access Toolbar (QAT) commands in Microsoft Office 2007/2010 — covering Excel and PowerPoint. Includes VBA code usable with Word too.
 
@@ -60,3 +69,25 @@ Contributions are welcome! Feel free to:
 ## License
 
 MIT License — see [LICENSE](LICENSE) for details.
+
+---
+
+## 📜 SourceForge heritage
+
+This project originated on **SourceForge** before being migrated to GitHub. The legacy SourceForge entry, if still available, can be searched at:
+
+🔗 https://sourceforge.net/projects/qatindex/
+
+The repository here at `socrtwo/qatindex-SF` is the canonical, actively-maintained home. All future updates, issue tracking, and releases happen on GitHub.
+
+## 🛠️ Contributing
+
+Issues and pull requests are welcome at [https://github.com/socrtwo/qatindex-SF/issues](https://github.com/socrtwo/qatindex-SF/issues).
+
+## 📝 License
+
+See the [LICENSE](https://github.com/socrtwo/qatindex-SF/blob/main/LICENSE) file in this repository. If no license file is present, the project is shared as-is for reference and personal use; please contact the maintainer for other use cases.
+
+---
+
+*Maintained by [@socrtwo](https://github.com/socrtwo)*
