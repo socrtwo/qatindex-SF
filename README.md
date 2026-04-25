@@ -1,5 +1,10 @@
 # Microsoft Office QAT Index
 
+<!--PAGES_LINK_BANNER-->
+> 🌐 **Live page:** [https://socrtwo.github.io/qatindex-SF/](https://socrtwo.github.io/qatindex-SF/)  
+> 📦 **Releases:** [github.com/socrtwo/qatindex-SF/releases](https://github.com/socrtwo/qatindex-SF/releases)
+<!--/PAGES_LINK_BANNER-->
+
 A searchable index of Quick Access Toolbar (QAT) commands in Microsoft Office 2007/2010 — covering Excel and PowerPoint. Includes VBA code usable with Word too.
 
 ## Screenshots
