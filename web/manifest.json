@@ -1,0 +1,49 @@
+{
+  "name": "QAT Command Index",
+  "short_name": "QAT Index",
+  "description": "A searchable index of Quick Access Toolbar (QAT) and ribbon command identifiers for Microsoft Office, powered by Microsoft's official OfficeDev dataset.",
+  "id": "/",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui", "browser"],
+  "orientation": "any",
+  "theme_color": "#0f0322",
+  "background_color": "#08010f",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["productivity", "developer", "utilities", "reference"],
+  "icons": [
+    { "src": "icons/favicon-32.png",          "sizes": "32x32",   "type": "image/png" },
+    { "src": "icons/icon-192.png",            "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png",            "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png",   "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon.svg",                "sizes": "any",     "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Excel commands",
+      "short_name": "Excel",
+      "url": "./?app=excel",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Word commands",
+      "short_name": "Word",
+      "url": "./?app=word",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "PowerPoint commands",
+      "short_name": "PowerPoint",
+      "url": "./?app=powerpoint",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Outlook commands",
+      "short_name": "Outlook",
+      "url": "./?app=outlook",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
