@@ -3,9 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0f0322">
+<meta name="theme-color" content="#0f0322" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f5f3ff" media="(prefers-color-scheme: light)">
 <title>QAT Command Index — Microsoft Office Control Identifiers</title>
 <meta name="description" content="A modern, searchable index of Quick Access Toolbar (QAT) and ribbon command identifiers for Microsoft Office (Word, Excel, PowerPoint, Outlook, Access, OneNote, Visio, Project, Publisher). Data sourced from Microsoft's official OfficeDev repository.">
+
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="QAT Index">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="QAT Index">
+<meta name="format-detection" content="telephone=no">
+
+<meta property="og:title" content="QAT Command Index">
+<meta property="og:description" content="Searchable index of Microsoft Office QAT and ribbon command identifiers, powered by Microsoft's official OfficeDev dataset.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="icons/icon-512.png">
+<meta name="twitter:card" content="summary">
+
 <style>
   :root {
     color-scheme: dark;
@@ -26,13 +46,16 @@
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { min-height: 100%; }
+  html { -webkit-text-size-adjust: 100%; }
   body {
     font-family: 'Inter', -apple-system, system-ui, sans-serif;
     background: radial-gradient(ellipse at top, var(--bg-1) 0%, var(--bg-0) 70%);
     color: var(--text);
     -webkit-font-smoothing: antialiased;
     line-height: 1.55;
+    overscroll-behavior-y: none;
   }
+  button, input, select { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
   .orbs { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
   .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.40; animation: float 18s ease-in-out infinite; }
   .o1 { width: 480px; height: 480px; background: var(--pink); top: -140px; left: -120px; }
@@ -46,7 +69,15 @@
 
   .wrap {
     position: relative; z-index: 1;
-    max-width: 1280px; margin: 0 auto; padding: 32px 20px 80px;
+    max-width: 1280px; margin: 0 auto;
+    padding:
+      max(20px, env(safe-area-inset-top, 0px))
+      max(20px, env(safe-area-inset-right, 0px))
+      max(48px, env(safe-area-inset-bottom, 0px))
+      max(20px, env(safe-area-inset-left, 0px));
+  }
+  @media (min-width: 720px) {
+    .wrap { padding-top: max(32px, env(safe-area-inset-top, 0px)); padding-bottom: 80px; }
   }
 
   header.hero { margin-bottom: 24px; }
@@ -176,6 +207,7 @@
 
   .table-wrap {
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
     border-radius: 14px;
     border: 1px solid var(--border);
     background: rgba(0,0,0,0.18);
@@ -184,6 +216,32 @@
   table {
     width: 100%; border-collapse: separate; border-spacing: 0;
     font-size: 0.88rem; min-width: 760px;
+  }
+  @media (max-width: 720px) {
+    .table-wrap { max-height: none; background: transparent; border: none; border-radius: 0; padding: 0; }
+    table { display: block; min-width: 0; }
+    table thead { display: none; }
+    table tbody, table tr, table td { display: block; }
+    table tbody tr {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin: 0 0 10px;
+    }
+    table tbody tr + tr td { border-top: none; }
+    table tbody td { padding: 3px 0; border: none; }
+    table tbody td::before {
+      content: attr(data-label) ":\00a0";
+      color: var(--text-faint); font-size: 0.78rem;
+      text-transform: uppercase; letter-spacing: 0.04em;
+      display: inline-block; margin-right: 4px;
+    }
+    table tbody td.control-name { white-space: normal; padding-bottom: 6px; word-break: break-word; }
+    table tbody td.control-name::before { display: none; }
+    table tbody td.control-name { font-size: 1rem; }
+    table tbody td.control-name .copy-btn { opacity: 1; }
+    .empty { padding: 28px 12px; }
   }
   thead th {
     position: sticky; top: 0; z-index: 2;
@@ -333,7 +391,7 @@
       repository (Microsoft 365 Current Channel).
     </p>
     <nav class="meta-bar">
-      <span class="pill"><span class="dot"></span>Live from OfficeDev</span>
+      <span class="pill" id="onlinePill"><span class="dot"></span>Live from OfficeDev</span>
       <a href="https://github.com/socrtwo/qatindex-SF" target="_blank" rel="noopener">📂 Source</a>
       <a href="https://github.com/socrtwo/qatindex-SF/releases" target="_blank" rel="noopener">⬇ Legacy Excel/PPT downloads</a>
       <a href="https://github.com/socrtwo/qatindex-SF/issues" target="_blank" rel="noopener">💬 Issues</a>
@@ -404,6 +462,7 @@
     <dl id="detailFields"></dl>
     <div class="actions">
       <button class="btn primary" id="detailCopy">Copy Control Name</button>
+      <button class="btn" id="detailShare" hidden>Share…</button>
       <button class="btn" id="detailClose">Close</button>
     </div>
   </div>
@@ -674,12 +733,12 @@
       const tr = document.createElement('tr');
       tr.tabIndex = 0;
       tr.innerHTML = `
-        <td class="control-name">${highlight(r.ControlName, q)}<button class="copy-btn" title="Copy" data-copy="${escapeHTML(r.ControlName)}">⧉</button></td>
-        <td>${typeBadge(r.ControlType)}</td>
-        <td>${highlight(r.TabSet || '—', q)}</td>
-        <td>${highlight(r.Tab || '—', q)}</td>
-        <td>${highlight(r.Group || '—', q)}</td>
-        <td>${highlight(r.Parent || (r.Tab === 'Quick Access Toolbar' ? '—' : '—'), q)}</td>
+        <td class="control-name" data-label="Control">${highlight(r.ControlName, q)}<button class="copy-btn" title="Copy" data-copy="${escapeHTML(r.ControlName)}">⧉</button></td>
+        <td data-label="Type">${typeBadge(r.ControlType)}</td>
+        <td data-label="Tab Set">${highlight(r.TabSet || '—', q)}</td>
+        <td data-label="Tab">${highlight(r.Tab || '—', q)}</td>
+        <td data-label="Group">${highlight(r.Group || '—', q)}</td>
+        <td data-label="Parent">${highlight(r.Parent || '—', q)}</td>
       `;
       tr.addEventListener('click', (e) => {
         if (e.target.closest('.copy-btn')) return;
@@ -718,6 +777,23 @@
       .join('') || '<dt>—</dt><dd>No additional metadata.</dd>';
     detailEl.classList.add('show');
     $('#detailCopy').onclick = () => { copyText(r.ControlName); };
+
+    const shareBtn = $('#detailShare');
+    if (navigator.share) {
+      shareBtn.hidden = false;
+      shareBtn.onclick = () => {
+        const url = new URL(location.href);
+        url.searchParams.set('app', state.appId);
+        url.searchParams.set('q', r.ControlName);
+        navigator.share({
+          title: `${r.ControlName} — QAT Index`,
+          text: `${r.ControlName} (${appById(state.appId).label}${r.Tab ? ' · ' + r.Tab : ''})`,
+          url: url.toString(),
+        }).catch(() => {});
+      };
+    } else {
+      shareBtn.hidden = true;
+    }
   }
   function closeDetail() { detailEl.classList.remove('show'); }
 
@@ -829,6 +905,41 @@
       if (a.id !== state.appId) loadApp(a.id).catch(()=>{});
     }
   }, 1500);
+
+  // Network status indicator
+  function updateOnline() {
+    document.documentElement.dataset.online = navigator.onLine ? '1' : '0';
+    const pill = document.getElementById('onlinePill');
+    if (!pill) return;
+    if (navigator.onLine) {
+      pill.innerHTML = '<span class="dot"></span>Live from OfficeDev';
+      pill.style.borderColor = '';
+    } else {
+      pill.innerHTML = '<span class="dot" style="background:#ffd166;box-shadow:0 0 8px #ffd166"></span>Offline — using cached data';
+      pill.style.borderColor = 'rgba(255,209,102,0.4)';
+    }
+  }
+  window.addEventListener('online', updateOnline);
+  window.addEventListener('offline', updateOnline);
+  updateOnline();
+
+  // Service worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').then((reg) => {
+        // If an update is found, activate it silently on next load
+        reg.addEventListener('updatefound', () => {
+          const nw = reg.installing;
+          if (!nw) return;
+          nw.addEventListener('statechange', () => {
+            if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+              nw.postMessage('SKIP_WAITING');
+            }
+          });
+        });
+      }).catch(() => { /* SW unsupported or blocked — degrade silently */ });
+    });
+  }
 })();
 </script>
 </body>
