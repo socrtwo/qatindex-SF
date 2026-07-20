@@ -1,0 +1,106 @@
+name: Release (multi-platform)
+
+# How to release:
+#   - Easiest:  Actions -> "Release (multi-platform)" -> Run workflow, enter a
+#               version like `v1.0.0`. The workflow builds every platform bundle
+#               and attaches all of them to a fresh GitHub Release (creating the
+#               tag on the current ref if it does not exist).
+#   - Or:       push a `v*` tag (`git tag v1.0.0 && git push origin v1.0.0`).
+#
+# NOTE: always tag with a single leading "v" (v1.0.0), NOT "vV1.0.0". The build
+# script normalizes the version regardless, but a clean tag keeps the release
+# page tidy.
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Version tag (e.g. v1.0.0). Created on the current ref if missing.'
+        required: true
+        default: 'v1.0.0'
+      prerelease:
+        description: 'Mark as pre-release?'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+
+jobs:
+  bundle:
+    name: Build per-platform bundles
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.ver.outputs.version }}
+      tag: ${{ steps.ver.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: ver
+        name: Resolve version
+        run: |
+          if [ -n "${{ github.event.inputs.tag }}" ]; then
+            TAG="${{ github.event.inputs.tag }}"
+          else
+            TAG="${GITHUB_REF#refs/tags/}"
+          fi
+          # Normalize: strip every leading v/V so VERSION is just the number.
+          VERSION="$TAG"
+          while [ "${VERSION#[vV]}" != "$VERSION" ]; do VERSION="${VERSION#[vV]}"; done
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "tag=v${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Resolved version=${VERSION} tag=v${VERSION}"
+
+      - name: Build all platform bundles
+        run: bash scripts/build-releases.sh "${{ steps.ver.outputs.version }}"
+
+      - name: List built artifacts
+        run: ls -la dist/
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-bundles
+          path: dist/
+          if-no-files-found: error
+
+  publish:
+    name: Publish GitHub Release
+    runs-on: ubuntu-latest
+    needs: [bundle]
+    if: always() && needs.bundle.result == 'success'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download cross-platform bundles
+        uses: actions/download-artifact@v4
+        with:
+          name: release-bundles
+          path: dist/
+
+      - name: Show what will be published
+        run: ls -la dist/
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.bundle.outputs.tag }}
+          name: QAT Command Index ${{ needs.bundle.outputs.tag }}
+          prerelease: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.prerelease == 'true' }}
+          body_path: dist/RELEASE_NOTES.md
+          # Every path below is written by scripts/build-releases.sh for the
+          # resolved version. fail_on_unmatched_files makes the run FAIL loudly
+          # if any required bundle is missing, instead of silently publishing a
+          # release with zero assets.
+          files: |
+            dist/qatindex-windows-v${{ needs.bundle.outputs.version }}.zip
+            dist/qatindex-macos-v${{ needs.bundle.outputs.version }}.zip
+            dist/qatindex-linux-v${{ needs.bundle.outputs.version }}.tar.gz
+            dist/qatindex-chromeos-v${{ needs.bundle.outputs.version }}.zip
+            dist/qatindex-android-v${{ needs.bundle.outputs.version }}.zip
+            dist/qatindex-ios-v${{ needs.bundle.outputs.version }}.zip
+            dist/qatindex-web-v${{ needs.bundle.outputs.version }}.zip
+            dist/SHA256SUMS
+          fail_on_unmatched_files: true
